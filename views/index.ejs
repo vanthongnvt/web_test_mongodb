@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title><%= title %></title>
+	<title>1712802</title>
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 	<link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
 	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -10,8 +10,17 @@
 	<link href="/stylesheets/dataTables/dataTables.responsive.css" rel="stylesheet">
 </head>
 <body>
-	<h1><%= title %></h1>
-	<p>Welcome to <%= title %></p>
+	<div class="row" style="padding: 20px">
+		<div class="col-lg-5">
+			<input type="text" class="form-control" placeholder="username" required="" name="username">
+		</div>
+		<div class="col-lg-5">
+			<input type="email" class="form-control" placeholder="email" required="" name="email">
+		</div>
+		<div class="col-lg-2">
+			<input type="submit" class="create-user-btn form-control btn btn-primary" value="Thêm">
+		</div>
+	</div>
 	<div id="page-wrapper">
 		<div class="container-fluid">
 			<!-- /.row -->
@@ -31,7 +40,7 @@
 											<th>Created at</th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody class="list">
 										<% users.forEach(function(user,i) {
 											%>
 											<tr class="<%if (i%2==1) { %>odd <%} else {%>even<%} %>gradeX">
@@ -61,6 +70,29 @@
 			$('#dataTables-example').DataTable({
 				responsive: true
 			});
+
+			$('.create-user-btn').click(function(){
+				var username = $('input[name="username"]').val().trim();
+				var email = $('input[name="email"]').val().trim();
+				if(username===""||email===""){
+					alert('Dữ liệu không hợp lệ');
+					return false;
+				}
+				else{
+					$.ajax({
+						type:'post',
+						url:'/create-user',
+						data:{username:username,email:email},
+						success:function(res){
+							location.reload();
+							return false;
+						},
+						error:function(xhr, textStatus, error){
+							alert('Đã có lỗi xảy ra. Vui lòng quay lại sau');
+						}
+					})
+				}
+			})
 		});
 	</script>
 </body>
